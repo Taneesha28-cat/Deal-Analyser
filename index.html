@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deal Compass</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">DC</span>
+        <div>
+          <div>Deal Compass</div>
+          <div class="logo-sub">Investment Thesis Validator</div>
+        </div>
+      </div>
+      <div class="header-steps">
+        <button class="step-pill active" id="nav-1" type="button" data-step="1">1 Thesis</button>
+        <button class="step-pill" id="nav-2" type="button" data-step="2">2 Document</button>
+        <button class="step-pill" id="nav-3" type="button" data-step="3">3 Analysis</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="panel active" id="panel-1">
+        <h1 class="panel-title">Configure Your Fund Mandate</h1>
+        <p class="panel-sub">Set the criteria used by the backend scoring engine.</p>
+
+        <div class="thesis-grid">
+          <label class="field-group">Fund Name
+            <input type="text" id="fund-name" placeholder="Apex Capital Partners III">
+          </label>
+          <label class="field-group">Strategy
+            <select id="strategy">
+              <option value="buyout">Buyout</option>
+              <option value="growth">Growth Equity</option>
+              <option value="venture">Venture Capital</option>
+              <option value="credit">Private Credit</option>
+              <option value="distressed">Distressed</option>
+            </select>
+          </label>
+          <label class="field-group">Min Ticket Size ($M)
+            <input type="number" id="min-ticket" value="25" min="0" step="1">
+          </label>
+          <label class="field-group">Max Ticket Size ($M)
+            <input type="number" id="max-ticket" value="200" min="0" step="1">
+          </label>
+          <label class="field-group">Min EBITDA ($M)
+            <input type="number" id="min-ebitda" value="5" min="0" step="0.1">
+          </label>
+          <label class="field-group">Target EBITDA Margin (%)
+            <input type="number" id="target-margin" value="20" min="-100" step="0.1">
+          </label>
+          <label class="field-group">Min Revenue ($M)
+            <input type="number" id="min-rev" value="15" min="0" step="0.1">
+          </label>
+          <label class="field-group">Target Hold Period (yrs)
+            <input type="number" id="hold-period" value="5" min="1" step="1">
+          </label>
+
+          <div class="field-group field-full">
+            <span>Target Sectors</span>
+            <div class="tag-grid" id="sectors">
+              <button class="tag selected" type="button" data-val="technology">Technology</button>
+              <button class="tag selected" type="button" data-val="healthcare">Healthcare</button>
+              <button class="tag" type="button" data-val="industrials">Industrials</button>
+              <button class="tag" type="button" data-val="business-services">Business Services</button>
+              <button class="tag" type="button" data-val="consumer">Consumer</button>
+              <button class="tag" type="button" data-val="fintech">Fintech</button>
+              <button class="tag" type="button" data-val="saas">SaaS / Software</button>
+              <button class="tag" type="button" data-val="media">Media</button>
+              <button class="tag" type="button" data-val="energy">Energy / CleanTech</button>
+              <button class="tag" type="button" data-val="real-estate">Real Estate</button>
+            </div>
+          </div>
+
+          <div class="field-group field-full">
+            <span>Target Geographies</span>
+            <div class="tag-grid" id="geos">
+              <button class="tag selected" type="button" data-val="north-america">North America</button>
+              <button class="tag selected" type="button" data-val="western-europe">Western Europe</button>
+              <button class="tag" type="button" data-val="nordics">Nordics</button>
+              <button class="tag" type="button" data-val="dach">DACH</button>
+              <button class="tag" type="button" data-val="apac">APAC</button>
+              <button class="tag" type="button" data-val="latam">LatAm</button>
+              <button class="tag" type="button" data-val="middle-east">Middle East</button>
+            </div>
+          </div>
+
+          <label class="field-group field-full">Key Thesis Criteria
+            <textarea id="thesis-extra">Must have recurring revenue >60%, no single customer >15% of revenue, founder-led preferred, strong net dollar retention, minimum 2 years EBITDA positive.</textarea>
+          </label>
+        </div>
+
+        <div class="action-row">
+          <button class="btn btn-primary" type="button" data-step="2">Continue to Document Upload</button>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-2">
+        <h1 class="panel-title">Upload Deal Information</h1>
+        <p class="panel-sub">Paste a CIM summary or upload a PDF/TXT file. PDFs are extracted on the backend before scoring.</p>
+
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">+</div>
+          <div class="upload-title">Drop a PDF or text file here</div>
+          <div class="upload-sub">PDF or TXT, up to 15MB. Scanned PDFs need OCR before analysis.</div>
+          <div class="file-name" id="file-name-display"></div>
+          <input type="file" id="file-input" accept=".pdf,.txt,application/pdf,text/plain">
+        </div>
+
+        <div class="text-fallback">
+          <label for="deal-text">Deal Description / Key Information</label>
+          <textarea id="deal-text" placeholder="Company: TechFlow SaaS
+Sector: B2B Software
+Revenue: $28M ARR, growing 45% YoY
+EBITDA: $6.2M (22% margin)
+Customers: 340 mid-market, NRR 118%, largest customer 9%
+Geography: North America
+Ask: $40M equity check, $180M EV"></textarea>
+        </div>
+
+        <div id="upload-error" class="error-msg" hidden></div>
+
+        <div class="action-row">
+          <button class="btn btn-ghost" type="button" data-step="1">Back</button>
+          <button class="btn btn-primary" id="analyze-btn" type="button">Run Thesis Analysis</button>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-3">
+        <div id="loading-view" class="loading-state" hidden>
+          <div class="spinner"></div>
+          <div class="loading-text">Analyzing deal against your thesis...</div>
+          <div class="loading-steps">
+            <div class="loading-step active">Extracting key financial metrics</div>
+            <div class="loading-step active">Scoring mandate and return profile</div>
+            <div class="loading-step active">Identifying red flags</div>
+            <div class="loading-step active">Generating IC memo draft</div>
+          </div>
+        </div>
+        <div id="results-view"></div>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
